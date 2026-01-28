@@ -51,6 +51,35 @@ void UOnlineAuthSubsystem::LoginWithDevAuthTool(const FString& HostAndPort, cons
 	);
 }
 
+void UOnlineAuthSubsystem::LoginWithSteamTicket(const FString& SteamTicket)
+{
+	if (!Auth) return;
+
+	const ULocalPlayer* Player = GetGameInstance()->GetFirstGamePlayer();
+	if (!Player)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Auth failed: No LocalPlayer yet; cannot login."));
+		return;
+	}
+
+	UE::Online::FAuthLogin::Params Params;
+	Params.PlatformUserId = Player->GetPlatformUserId();
+
+	Params.CredentialsType = UE::Online::LoginCredentialsType::ExternalAuth;
+
+	Params.CredentialsToken.Set<UE::Online::FExternalAuthToken>({
+		.Type = UE::Online::ExternalLoginType::SteamSessionTicket,
+		.Data = SteamTicket,
+	});
+
+	Auth->Login(MoveTemp(Params)).OnComplete(
+		[this](const UE::Online::TOnlineResult<UE::Online::FAuthLogin>& Result)
+		{
+			OnLoginComplete(Result);
+		}
+	);
+}
+
 void UOnlineAuthSubsystem::OnLoginComplete(const UE::Online::TOnlineResult<UE::Online::FAuthLogin>& Result)
 {
 	if (Result.IsOk())

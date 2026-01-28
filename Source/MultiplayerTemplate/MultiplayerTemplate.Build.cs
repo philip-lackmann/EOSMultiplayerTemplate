@@ -17,10 +17,17 @@ public class MultiplayerTemplate : ModuleRules
 			"DeveloperSettings",
 			"OnlineServicesInterface", 
 			"CoreOnline",
+			"OnlineSubsystem",
+			"OnlineSubsystemUtils"
 		});
-
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
-
+		
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"OnlineServicesEOSGS",
+		});
+		
+		DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
+		
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		

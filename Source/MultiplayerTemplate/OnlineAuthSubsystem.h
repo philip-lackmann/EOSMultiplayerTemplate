@@ -22,6 +22,8 @@ public:
 
 	// DevAuthTool login (no account portal UI loop)
 	void LoginWithDevAuthTool(const FString& HostAndPort, const FString& CredentialName);
+	
+	void LoginWithSteamTicket(const FString& SteamTicket);
 
 	bool IsLoggedIn() const { return bLoggedIn; }
 	UE::Online::FAccountId GetAccountId() const { return AccountId; }
