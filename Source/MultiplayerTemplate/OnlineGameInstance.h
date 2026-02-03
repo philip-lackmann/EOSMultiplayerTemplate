@@ -15,19 +15,11 @@ class MULTIPLAYERTEMPLATE_API UOnlineGameInstance : public UGameInstance
 	GENERATED_BODY()
 	
 protected:
-	 
-	/** Called to initialize game instance on game startup */
-	virtual void Init() override;
+	virtual void OnStart() override;
 	
-	/** Called to shutdown game instance on game exit */
 	virtual void Shutdown() override;
-	
-public:
-	 
-	/** Called to initialize game instance object */
-	UOnlineGameInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
+
 private:
 	UFUNCTION()
-	void HandleLocalPlayerAdded(ULocalPlayer* NewPlayer);
+	void Authenticate();
 };

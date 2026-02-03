@@ -4,13 +4,15 @@
 #include "OnlineGameInstance.h"
 
 #include "OnlineAuthSubsystem.h"
-#include "OnlineIdentityHelper.h"
+#include "IdentityProvider/AuthHelper.h"
+#include "IdentityProvider/IExternalTokenProvider.h"
 
-void UOnlineGameInstance::Init()
+void UOnlineGameInstance::OnStart()
 {
-	Super::Init();
+	Super::OnStart();
+	UE_LOG(LogTemp, Log, TEXT("UOnlineGameInstance::OnStart"));
 	
-	OnLocalPlayerAddedEvent.AddUObject(this, &UOnlineGameInstance::HandleLocalPlayerAdded);
+	this->Authenticate();
 }
 
 void UOnlineGameInstance::Shutdown()
@@ -18,21 +20,32 @@ void UOnlineGameInstance::Shutdown()
 	Super::Shutdown();
 }
 
-UOnlineGameInstance::UOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
+void UOnlineGameInstance::Authenticate()
 {
+	UE_LOG(LogTemp, Log, TEXT("UOnlineGameInstance::Authenticate"));
 	
-}
-
-void UOnlineGameInstance::HandleLocalPlayerAdded(ULocalPlayer* NewPlayer)
-{
-	if (UOnlineAuthSubsystem* Auth = GetSubsystem<UOnlineAuthSubsystem>())
+	UOnlineAuthSubsystem* Auth = GetSubsystem<UOnlineAuthSubsystem>();
+	if (!Auth)
 	{
-		// Auth->LoginWithDevAuthTool(TEXT("localhost:8081"), TEXT("Dev"));
-		OnlineIdentityHelper::GetSteamWebApiTicket(GetWorld(), [Auth](bool bOk, const FString& Ticket)
-		{
-			if (!bOk) return;
-			Auth->LoginWithSteamTicket(Ticket);
-		});
+		UE_LOG(LogTemp, Error, TEXT("[Auth] OnlineAuthSubsystem is null"));
 	}
-	OnLocalPlayerAddedEvent.RemoveAll(this);
+	
+	constexpr Platform Platform = DEV; // TODO: some config shizzle
+	IExternalTokenProvider* TokenProvider = AuthHelper::CreateTokenProvider(Platform, this);
+	
+	if (!TokenProvider)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[Auth] TokenProvider is null"));
+		return;
+	}
+	
+	TokenProvider->GetToken([Auth, Platform](bool bOk, const FString& Token)
+	{
+		if (!bOk)
+		{
+			UE_LOG(LogTemp, Error, TEXT("[Auth] Failed retrieving a token for login. Platform: %s"), *PlatformToString(Platform));
+			return;
+		}
+		Auth->LoginWithExternalToken(Platform, Token);
+	});	
 }

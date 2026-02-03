@@ -72,3 +72,19 @@ ClientId=CLIENT_ID
 ClientSecret=CLIENT_SECRET
 ClientEncryptionKey=CLIENT_ENCRYPTION_KEY
 ````
+
+2. Setup EOS Client
+...
+
+3. Setup EOS Identity Providers
+...
+
+## 2.0 Supported Platforms / External Tokens
+###  Steam Ticket
+Implemented and testable using Spacewar as app id.
+
+### Meta User ID and Nonce
+Technically implemented, but not to be tested in the near future.
+Meta does not seem to offer any easy way to test this as dev. For this to work the app needs to signed, 
+distributed on a release channel and worst of all a data usage checkup (DUC) needs to be completed, 
+requesting permissions to read the logged in user id, which need to be approved by meta after filling in a compliance form.

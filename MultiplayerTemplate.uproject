@@ -30,16 +30,36 @@
 			"Name": "OnlineServicesEOS",
 			"Enabled": true
 		},
-		{ 
+		{
 			"Name": "OnlineServicesEOSGS",
 			"Enabled": true
 		},
 		{
 			"Name": "OnlineSubsystemSteam",
-			"Enabled": true
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux"
+			]
 		},
 		{
 			"Name": "SteamShared",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux"
+			]
+		},
+		{
+			"Name": "OculusPlatform",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/7ce814580ba341b4bb5865983fea9d31",
+			"SupportedTargetPlatforms": [
+				"Android"
+			]
+		},
+		{
+			"Name": "OpenXR",
 			"Enabled": true
 		}
 	]

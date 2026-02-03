@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IdentityProvider/AuthHelper.h"
 #include "Online/Auth.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Online/OnlineServices.h"
@@ -19,11 +20,8 @@ class MULTIPLAYERTEMPLATE_API UOnlineAuthSubsystem : public UGameInstanceSubsyst
 	
 public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
-	// DevAuthTool login (no account portal UI loop)
-	void LoginWithDevAuthTool(const FString& HostAndPort, const FString& CredentialName);
 	
-	void LoginWithSteamTicket(const FString& SteamTicket);
+	void LoginWithExternalToken(Platform Platform, const FString& Token);
 
 	bool IsLoggedIn() const { return bLoggedIn; }
 	UE::Online::FAccountId GetAccountId() const { return AccountId; }

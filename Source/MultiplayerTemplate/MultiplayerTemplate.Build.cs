@@ -26,7 +26,19 @@ public class MultiplayerTemplate : ModuleRules
 			"OnlineServicesEOSGS",
 		});
 		
-		DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
+		if (Target.Platform == UnrealTargetPlatform.Win64 || Target.Platform == UnrealTargetPlatform.Linux)
+        {
+            DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
+        }
+		
+		if (Target.Platform == UnrealTargetPlatform.Android)
+        {
+            PublicDependencyModuleNames.AddRange(new string[]
+            {
+                "OVRPlatform",
+                "OVRPlatformSDK"
+            });
+        }
 		
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
